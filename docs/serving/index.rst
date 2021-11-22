@@ -10,7 +10,5 @@ See the following sections for details and examples.
    :maxdepth: 2
    :glob:
 
-   serving-graph
-   model-api
-   graph-example
-   distributed-graph
+   graph/graph-overview
+   model-serving/model-api

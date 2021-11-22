@@ -1,4 +1,4 @@
-# Model Serving API and Protocol
+# Model Serving Overview
 
 ## Creating Custom Model Serving Class
 
@@ -238,3 +238,12 @@ to add tracking to your model add tracking parameters to your function:
 * **stream_path** - the v3io stream path (e.g. `v3io:///users/..`)
 * **sample** -  optional, sample every N requests
 * **batch** -  optional, send micro-batches every N requests
+
+```{toctree}
+:maxdepth: 1
+:hidden: true
+
+serving-graph
+serving-graph-example
+
+```
