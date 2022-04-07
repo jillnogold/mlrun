@@ -1,14 +1,15 @@
-# Setting a remote environment <!-- omit in toc -->
+# Setting up your development environment <!-- omit in toc -->
 
-MLRun allows you to use your code on a local machine while running your functions on a remote cluster. This tutorial explains how you can set this up.
+With MLRun, you can use your code on a local machine while running your functions either locally or on a remote cluster. This tutorial explains how to set up both options.
 
 **In this section**
 - [Prerequisites](#prerequisites)
-- [Configure remote environment](#configure-remote-environment)
-  - [Set environment variables](#set-environment-variables)
+- [Configure the environment](#configure-remote-environment)
+    - [Set environmental variables by .env file](#set-environmental-variables-by-env-file)
+    - [Set environment variables](#set-environment-variables)
 - [IDE configuration](#ide-configuration)
-- [Remote environment from PyCharm](#remote-environment-from-pycharm)
-- [Remote environment from VSCode](#remote-environment-from-vscode)
+- [Set the environment from PyCharm](#remote-environment-from-pycharm)
+- [Set the environment from VSCode](#remote-environment-from-vscode)
   - [Create environment file](#create-environment-file)
   - [Create Python debug configuration](#create-python-debug-configuration)
   - [Set environment file in debug configuration](#set-environment-file-in-debug-configuration)
@@ -19,43 +20,80 @@ MLRun allows you to use your code on a local machine while running your function
 
 Before you begin, ensure that the following prerequisites are met:
 
-1. Install MLRun locally.
+1. Install MLRun locally. You need to install MLRun locally and make sure the that the MLRun version you install is the same as the MLRun service version.
 
-    You need to install MLRun locally and make sure the that the MLRun version you install is the same as the MLRun service version. Install a specific version using the following command; replace the `<version>`  placeholder with the MLRun version number (e.g., `1.0.0`):
- 
-    ```sh
-    pip install mlrun==<version>
-    ```
-
-    If you already installed a previous version of MLRun, you should first uninstall it by running:
+   If you already installed a previous version of MLRun, uninstall it by running:
 
     ```sh
     pip uninstall -y mlrun
     ```
 
-2. Ensure that you have remote access to your MLRun service (i.e., to the service URL on the remote Kubernetes cluster).
+   If you are running the MLRun service remotely, Install a specific version using the following command; replace the `<version>`  placeholder with the MLRun version number (e.g., `1.0.0`):
+ 
+    ```sh
+    pip install mlrun==<version>
+    ```
+   If you are running the MLRun service locally, install the latest version by running:
+ ```  
+   pip install mlrun[api]
+```    
+   To specify an earlier version, run: `pip install mlrun[api]==x.y.z` where x.y.z is the version number.
 
-## Configure remote environment
+2. If you are going to run the MLRun service locally, start the service by running, on a seperate terminal/console:
+   ```
+   mlrun db
+   MLRUN_DBPATH=http://localhost:8080
+   MLRUN_ARTIFACT_PATH=<full path to saved artifact dir>
+   ```
+   You can use template values in the artifact path. The supported values are:
+   - `{{project}}` to include the project name in the path.
+   - `{{run.uid}}` to include the specific run uid in the artifact path. 
+   
+   For example:
+
+    ```ini
+    MLRUN_ARTIFACT_PATH=/User/artifacts/{{project}}
+    ```
+    
+   or:
+
+    ```ini
+    MLRUN_ARTIFACT_PATH=/User/artifacts/{{project}}/{{run.uid}}
+    ```
+    
+2. If you are running the MLRun service remotely, ensure that you have access to your MLRun service (i.e., to the service URL on the remote Kubernetes cluster).
+
+## Configure the environment
 
 ### Set environmental variables by .env file 
 
-You can store the credentials and environmental settings, including: project secrets, remote cluster credentials, addresses, etc in an .env file. Use the SDK or the env option to load the .env file when MLRun imports/starts. 
+You can store the credentials and environmental settings, including project secrets, remote cluster credentials, addresses, etc in a standard .env file. Use the SDK or the env option to load the .env file when MLRun imports or starts. 
 
 #### File format
 
-The file has lines in the format `KEY=VALUE`, for example:
+The file has lines in the format `KEY=VALUE`. 
 
-        # this is an env file
-        MLRUN_DBPATH=https://mlrun-api.default-tenant.app.xxx.iguazio-cd1.com
-        V3IO_USERNAME=admin
-        V3IO_API=https://webapi.default-tenant.app.xxx.iguazio-cd1.com
-        V3IO_ACCESS_KEY=MYKEY123
-        AWS_ACCESS_KEY_ID-XXXX
-        AWS_SECRET_ACCESS_KEY=YYYY
+This sample file includes some basic settings for an MLRun service running remotely:
+```
+MLRUN_DBPATH=https://mlrun-api.default-tenant.app.xxx.iguazio-cd1.com
+V3IO_USERNAME=admin
+V3IO_ACCESS_KEY=MYKEY123
+AWS_ACCESS_KEY_ID-XXXX
+AWS_SECRET_ACCESS_KEY=YYYY
+```
+
+This sample file includes some basic settings for an MLRun service running locally:
+```
+MLRUN_ARTIFACT_PATH=<full path to saved artifact dir>
+V3IO_USERNAME=admin
+V3IO_ACCESS_KEY=MYKEY123
+V3IO_USERNAME=admin
+V3IO_API=https://webapi.default-tenant.app.xxx.iguazio-cd1.com
+```
+
 where:
 * MLRUN_DBPATH: API endpoint of the MLRun APIs service endpoint 
 * V3IO_USERNAME=username of a platform user with access to the MLRun service
-* V3IO_API=API endpoint of the webapi service endpoint; e.g., "https://default-tenant.app.mycluster.iguazio.com:8444"
 * V3IO_ACCESS_KEY=platform access key
     
 #### Usage
@@ -66,17 +104,18 @@ where:
    where:
       * `env_file`: path/url to .env file
       * `return_dict`: set to True to return the .env as a dict
+
+If the remote service is on an instance of the Iguazio MLOps Platform (**"the platform"**), set the following environment variables as well; replace the `<...>` placeholders with the information for your specific platform cluster:
+
+    ```ini
+    V3IO_USERNAME=<username of a platform user with access to the MLRun service>
+    V3IO_API=<API endpoint of the webapi service endpoint; e.g., "https://default-tenant.app.mycluster.iguazio.com:8444">
+    V3IO_ACCESS_KEY=<platform access key>
+    ```
+
+
+These are typical settings used for data access to cloud storage:      
       
-**Remote MLRun service address** for use withK8S Ingress or Iguazio:
-
- ```MLRUN_DBPATH=https://<MLRun-service-address>```
-
-**Iguazio-managed MLOps Service** use the credentials:
-   ```
-   V3IO_USERNAME=<iguazio username>
-   V3IO_ACCESS_KEY=<access-key>
-   ```
-   
 **AWS S3/services credentials** for use with S3 or Sagemaker:
    
    ```
@@ -84,11 +123,16 @@ where:
    AWS_SECRET_ACCESS_KEY=<access-key>
    ```
    
-**Azure connection string** points at a storage account. For example:
-   ```
-    DefaultEndpointsProtocol=https;AccountName=myAcct;AccountKey=XXXX;EndpointSuffix=core.windows.net
+**Azure connection string** points at a storage account. 
+
+For example: DefaultEndpointsProtocol=https;AccountName=myAcct;AccountKey=XXXX;EndpointSuffix=core.windows.net
+   ```    
    AZURE_STORAGE_CONNECTION_STRING=<connection-string>
-   GCP_CREDENTIALS='{"type": "service_account", "project_id": "iguazio", "private_key_id": "a603f3e04b83c1097654cfdf41ef5727b2593ea2", 
+   ```
+   
+**Google cloud**   
+```
+GCP_CREDENTIALS='{"type": "service_account", "project_id": "iguazio", "private_key_id": "a603f3e04b83c1097654cfdf41ef5727b2593ea2", 
     private_key": "-----BEGIN PRIVATE KEY-----\\123456789...\\-----END PRIVATE KEY-----\\n", "client_email": "mlrun-v1-
     warroom@iguazio.iam.gserviceaccount.com", "client_id": "115756219098901667372", "auth_uri": "https://accounts.google.com/o/oauth2/auth", 
     "token_uri": "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", 
@@ -101,42 +145,12 @@ You can get the platform access key from the platform dashboard: select the user
 
 ### Set environment variables
 
-If you are not using an .env file, you can set individual environment variables to define your MLRun configuration. As a minimum requirement:
+If you are not using an .env file, you can set individual environment variables to define your MLRun configuration using the variables described in [Set environmental variables by .env file](#set-environmental-variables-by-env-file). 
 
-1. Set `MLRUN_DBPATH` to the URL of the remote MLRun database/API service; replace the `<...>` placeholders to identify your remote target:
-
-    ```ini
-    MLRUN_DBPATH=<API endpoint of the MLRun APIs service endpoint; e.g., "https://mlrun-api.default-tenant.app.mycluster.iguazio.com">
-    ```
-    
-2. To store the artifacts on the remote server, you need to set the `MLRUN_ARTIFACT_PATH` to the desired root folder of your 
-artifact. You can use template values in the artifact path. The supported values are:
-   - `{{project}}` to include the project name in the path.
-   - `{{run.uid}}` to include the specific run uid in the artifact path. 
-
-   For example:
-
-    ```ini
-    MLRUN_ARTIFACT_PATH=/User/artifacts/{{project}}
-    ```
-    
-   or:
-
-    ```ini
-    MLRUN_ARTIFACT_PATH=/User/artifacts/{{project}}/{{run.uid}}
-    ```
-
-3. If the remote service is on an instance of the Iguazio MLOps Platform (**"the platform"**), set the following environment variables as well; replace the `<...>` placeholders with the information for your specific platform cluster:
-
-    ```ini
-    V3IO_USERNAME=<username of a platform user with access to the MLRun service>
-    V3IO_API=<API endpoint of the webapi service endpoint; e.g., "https://default-tenant.app.mycluster.iguazio.com:8444">
-    V3IO_ACCESS_KEY=<platform access key>
-    ```
 
 ## IDE configuration
 
-## Remote environment from PyCharm
+## Set the environment from PyCharm
 
 You can use PyCharm with MLRun remote by changing the environment variables configuration.
 
@@ -152,7 +166,7 @@ You can use PyCharm with MLRun remote by changing the environment variables conf
 
     ![Environment variables](../_static/images/pycharm/remote-pycharm-environment_variables.png)
 
-## Remote environment from VSCode
+## Set the environment from VSCode
 
 ### Create environment file
 
@@ -171,7 +185,9 @@ V3IO_API=<API endpoint of the webapi service endpoint; e.g., "https://default-te
 V3IO_ACCESS_KEY=<platform access key>
 ```
 
-> **Note**: Make sure that you add `.env` to your `.gitignore` file. The environment file contains sensitive information that you should not store in your source control.
+```{admonition}Note
+Make sure that you add `.env` to your `.gitignore` file. The environment file contains sensitive information that you should not store in your source control.
+```
 
 ### Create Python debug configuration
 
