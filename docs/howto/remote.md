@@ -37,9 +37,71 @@ Before you begin, ensure that the following prerequisites are met:
 
 ## Configure remote environment
 
+### Set environmental variables by .env file 
+
+You can store the credentials and environmental settings, including: project secrets, remote cluster credentials, addresses, etc in an .env file. Use the SDK or the env option to load the .env file when MLRun imports/starts. 
+
+#### File format
+
+The file has lines in the format `KEY=VALUE`, for example:
+
+        # this is an env file
+        MLRUN_DBPATH=https://mlrun-api.default-tenant.app.xxx.iguazio-cd1.com
+        V3IO_USERNAME=admin
+        V3IO_API=https://webapi.default-tenant.app.xxx.iguazio-cd1.com
+        V3IO_ACCESS_KEY=MYKEY123
+        AWS_ACCESS_KEY_ID-XXXX
+        AWS_SECRET_ACCESS_KEY=YYYY
+where:
+* MLRUN_DBPATH: API endpoint of the MLRun APIs service endpoint 
+* V3IO_USERNAME=username of a platform user with access to the MLRun service
+* V3IO_API=API endpoint of the webapi service endpoint; e.g., "https://default-tenant.app.mycluster.iguazio.com:8444"
+* V3IO_ACCESS_KEY=platform access key
+    
+#### Usage
+* To set the mlrun env from an .env file, use: `mlrun.set_env_from_file(env_path)`
+* To load project secrets from an .env file, use: `project.set_secrets(file_path="secrets.env")`
+* To load the .env file automatically on import, set the env var: `MLRUN_ENV_FILE` with the .env file path (useful if you're using CLI or want to skip `set_env_from_file()`
+* To set the env vars from a file and return the results as a dict, use: `env_dict = mlrun.set_env_from_file(env_path, return_dict=True)`
+   where:
+      * `env_file`: path/url to .env file
+      * `return_dict`: set to True to return the .env as a dict
+      
+**Remote MLRun service address** for use withK8S Ingress or Iguazio:
+
+ ```MLRUN_DBPATH=https://<MLRun-service-address>```
+
+**Iguazio-managed MLOps Service** use the credentials:
+   ```
+   V3IO_USERNAME=<iguazio username>
+   V3IO_ACCESS_KEY=<access-key>
+   ```
+   
+**AWS S3/services credentials** for use with S3 or Sagemaker:
+   
+   ```
+   AWS_ACCESS_KEY_ID=<key-id>
+   AWS_SECRET_ACCESS_KEY=<access-key>
+   ```
+   
+**Azure connection string** points at a storage account. For example:
+   ```
+    DefaultEndpointsProtocol=https;AccountName=myAcct;AccountKey=XXXX;EndpointSuffix=core.windows.net
+   AZURE_STORAGE_CONNECTION_STRING=<connection-string>
+   GCP_CREDENTIALS='{"type": "service_account", "project_id": "iguazio", "private_key_id": "a603f3e04b83c1097654cfdf41ef5727b2593ea2", 
+    private_key": "-----BEGIN PRIVATE KEY-----\\123456789...\\-----END PRIVATE KEY-----\\n", "client_email": "mlrun-v1-
+    warroom@iguazio.iam.gserviceaccount.com", "client_id": "115756219098901667372", "auth_uri": "https://accounts.google.com/o/oauth2/auth", 
+    "token_uri": "https://oauth2.googleapis.com/token", "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs", 
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mlrun-v1-warroom%40iguazio.iam.gserviceaccount.com"}'
+```  
+    
+#### Access keys
+You can get the platform access key from the platform dashboard: select the user-profile picture or icon from the top right corner of any page, and select **Access Keys** from the menu. In the **Access Keys** window, either copy an existing access key or create a new key and copy it. Alternatively, you can get the access key by checking the value of the `V3IO_ACCESS_KEY` environment variable in a web-shell or Jupyter Notebook service.
+
+
 ### Set environment variables
 
-Set environment variables to define your MLRun configuration. As a minimum requirement:
+If you are not using an .env file, you can set individual environment variables to define your MLRun configuration. As a minimum requirement:
 
 1. Set `MLRUN_DBPATH` to the URL of the remote MLRun database/API service; replace the `<...>` placeholders to identify your remote target:
 
@@ -71,8 +133,6 @@ artifact. You can use template values in the artifact path. The supported values
     V3IO_API=<API endpoint of the webapi service endpoint; e.g., "https://default-tenant.app.mycluster.iguazio.com:8444">
     V3IO_ACCESS_KEY=<platform access key>
     ```
-
-    You can get the platform access key from the platform dashboard: select the user-profile picture or icon from the top right corner of any page, and select **Access Keys** from the menu. In the **Access Keys** window, either copy an existing access key or create a new key and copy it. Alternatively, you can get the access key by checking the value of the `V3IO_ACCESS_KEY` environment variable in a web-shell or Jupyter Notebook service.
 
 ## IDE configuration
 
@@ -119,11 +179,11 @@ Create a [debug configuration in VSCode](https://code.visualstudio.com/docs/pyth
 
 To initialize debug configurations, first select the Run view in the sidebar:
 
-![Run icon](../_static/images/vscode/debug-icon.png)
+<img src="../_static/images/vscode/debug-icon.png" width="200" >
 
 If you don't yet have any configurations defined, you'll see a button to Run and Debug, as well as a link to create a configuration (launch.json) file:
 
-![Debug toolbar settings command](../_static/images/vscode/debug-start.png)
+<img src="../_static/images/vscode/debug-start.png" width="400" >
 
 To generate a `launch.json` file with Python configurations, do the following steps:
 
