@@ -1,8 +1,8 @@
-# How-To Guides and Demos
+# Tutorials
 
 ```{toctree}
 :maxdepth: 2
 
-convert-to-mlrun
-sklearn-project
+Work from IDE
+Additional demos / katacoda
 ```
