@@ -67,7 +67,8 @@ Before you begin, ensure that the following prerequisites are met:
 
 ### Set environmental variables by .env file 
 
-You can store the credentials and environmental settings, including project secrets, remote cluster credentials, addresses, etc in a standard .env file. Use the SDK or the env option to load the .env file when MLRun imports or starts. 
+You can store the credentials and environmental settings, including project secrets, remote cluster credentials, addresses, etc in a 
+standard .env file. Use the SDK or the env option to load the .env file when MLRun imports or starts. 
 
 #### File format
 
@@ -99,20 +100,21 @@ where:
 #### Usage
 * To set the mlrun env from an .env file, use: `mlrun.set_env_from_file(env_path)`
 * To load project secrets from an .env file, use: `project.set_secrets(file_path="secrets.env")`
-* To load the .env file automatically on import, set the env var: `MLRUN_ENV_FILE` with the .env file path (useful if you're using CLI or want to skip `set_env_from_file()`
+* To load the .env file automatically on import, set the env var: `MLRUN_ENV_FILE` with the .env file path (useful if you're using CLI or 
+want to skip `set_env_from_file()`
 * To set the env vars from a file and return the results as a dict, use: `env_dict = mlrun.set_env_from_file(env_path, return_dict=True)`
    where:
       * `env_file`: path/url to .env file
       * `return_dict`: set to True to return the .env as a dict
 
-If the remote service is on an instance of the Iguazio MLOps Platform (**"the platform"**), set the following environment variables as well; replace the `<...>` placeholders with the information for your specific platform cluster:
+If the remote service is on an instance of the Iguazio MLOps Platform (**"the platform"**), set the following environment variables as well; 
+replace the `<...>` placeholders with the information for your specific platform cluster:
 
     ```ini
     V3IO_USERNAME=<username of a platform user with access to the MLRun service>
     V3IO_API=<API endpoint of the webapi service endpoint; e.g., "https://default-tenant.app.mycluster.iguazio.com:8444">
     V3IO_ACCESS_KEY=<platform access key>
     ```
-
 
 These are typical settings used for data access to cloud storage:      
       
