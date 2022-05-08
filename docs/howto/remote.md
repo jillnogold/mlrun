@@ -13,6 +13,7 @@ MLRun allows you to use your code on a local machine while running your function
   - [Create Python debug configuration](#create-python-debug-configuration)
   - [Set environment file in debug configuration](#set-environment-file-in-debug-configuration)
 - [Set environment variables in a terminal](#set-environment-variables-in-a-terminal)
+- [Load the configuration and credential environmental variables from file](#load-the-configuration-and-credential-environmental-variables-from-file)
 
 <a id="prerequisites"></a>
 ## Prerequisites
@@ -119,11 +120,11 @@ Create a [debug configuration in VSCode](https://code.visualstudio.com/docs/pyth
 
 To initialize debug configurations, first select the Run view in the sidebar:
 
-![Run icon](../_static/images/vscode/debug-icon.png)
+<img src="../_static/images/vscode/debug-icon.png" alt="run-icon" width="200" />
 
 If you don't yet have any configurations defined, you'll see a button to Run and Debug, as well as a link to create a configuration (launch.json) file:
 
-![Debug toolbar settings command](../_static/images/vscode/debug-start.png)
+<img src="../_static/images/vscode/debug-start.png" alt="run-icon" width="400" />
 
 To generate a `launch.json` file with Python configurations, do the following steps:
 
@@ -191,3 +192,13 @@ source mlrun_env.sh
 ```
 
 Then launch your IDE from the same terminal session.
+
+## Load the configuration and credential environmental variables from file
+
+Use this procedure to load the env via config file when working from remote (e.g. via Pycharm).
+
+1. use `--env-file <env file path>` in mlrun run/build/deploy/project CLI commands to load config and credential env vars from file.
+2. Set the `MLRUN_SET_ENV_FILE=<env file path>` env var to point to a default env file (which will be loaded on import).
+when the `MLRUN_DBPATH` points to remote iguazio cluster and the `V3IO_API` and/or `V3IO_FRAMESD` vars are not set, they will be inferred from the DBPATH
+2. Add the default `env` file template in the Jupyter container `~/env` (to allow quick setup of remote demos)
+
