@@ -84,7 +84,7 @@ You can use PyCharm with MLRun remote by changing the environment variables conf
 1. From the main menu, choose **Run | Edit Configurations**.
 
     ![Edit configurations](../_static/images/pycharm/remote-pycharm-run_edit_configurations.png)
-
+<br>
 2. To set-up default values for all Python configurations, on the left-hand pane of the run/debug configuration dialog, expand the **Templates** node and select the **Python** node. The corresponding configuration template appears in the right-hand pane. Alternatively, you can edit a specific file configuration by choosing the corresponding file on the left-hand pane. Choose the **Environment Variables** edit box and expand it to edit the environment variables.
 
     ![Edit configuration screen](../_static/images/pycharm/remote-pycharm-edit_configurations_screen.png)
@@ -195,10 +195,41 @@ Then launch your IDE from the same terminal session.
 
 ## Load the configuration and credential environmental variables from file
 
-Use this procedure to load the env via config file when working from remote (e.g. via Pycharm).
+You can load the env via config file when working from remote (e.g. via Pycharm).
+   
+Example env file:
 
-1. use `--env-file <env file path>` in mlrun run/build/deploy/project CLI commands to load config and credential env vars from file.
+```
+# this is an env file
+V3IO_USERNAME=admin
+V3IO_API=https://webapi.default-tenant.app.xxx.iguazio-cd1.com
+V3IO_ACCESS_KEY=MYKEY123
+MLRUN_DBPATH=https://mlrun-api.default-tenant.app.xxx.iguazio-cd1.com
+AWS_ACCESS_KEY_ID=XXXX
+AWS_SECRET_ACCESS_KEY=YYYY
+```
+Usage:
+
+   - `set_env_from_file()` for reading `.env` files, setting the OS environment and reloading MLRun config
+   - `project.set_secrets()` reads dict or secrets env file and stores it in the project secrets
+      (note that MLRUN_DBPATH and V3IO_xxx vars are not written to the project secrets)
+   - `function.set_envs()` now have a new param `file_pat`h to set the env from an `.env` file
+
+```
+# set the env vars from a file and also return the results as a dict (e.g. for using in a function)
+env_dict = mlrun.set_env_from_file(env_path, return_dict=True)
+
+# read env vars from dict or file and set as project secrets (plus set the local env)
+project.set_secrets({"SECRET1": "value"})
+project.set_secrets(file_path=env_file)
+
+# copy env from file into a function spec
+function.set_envs(file_path=env_file)
+```
+
+1. Create an env file similar to the example, with lines in the form KEY=VALUE, and comment lines starting with "#".
+2. Use `--env-file <env file path>` in mlrun run/build/deploy/project CLI commands to load the config and credential env vars from file.
 2. Set the `MLRUN_SET_ENV_FILE=<env file path>` env var to point to a default env file (which will be loaded on import).
-when the `MLRUN_DBPATH` points to remote iguazio cluster and the `V3IO_API` and/or `V3IO_FRAMESD` vars are not set, they will be inferred from the DBPATH
-2. Add the default `env` file template in the Jupyter container `~/env` (to allow quick setup of remote demos)
+   If the `MLRUN_DBPATH` points to a remote iguazio cluster and the `V3IO_API` and/or `V3IO_FRAMESD` vars are not set, they will be inferred from the DBPATH.
+2. Add the default `env` file template in the Jupyter container `~/env` (to allow quick setup of remote demos).
 
