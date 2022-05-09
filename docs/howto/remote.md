@@ -13,7 +13,6 @@ MLRun allows you to use your code on a local machine while running your function
   - [Create Python debug configuration](#create-python-debug-configuration)
   - [Set environment file in debug configuration](#set-environment-file-in-debug-configuration)
 - [Set environment variables in a terminal](#set-environment-variables-in-a-terminal)
-- [Load the configuration and credential environmental variables from file](#load-the-configuration-and-credential-environmental-variables-from-file)
 
 <a id="prerequisites"></a>
 ## Prerequisites
