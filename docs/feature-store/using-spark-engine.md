@@ -43,6 +43,8 @@ The following code executes data ingestion using a local Spark session.
 
 When using a local Spark session, the `ingest` API would wait for its completion. 
 
+This example uses stocks.csv; see [Feature store example (stocks)](./basic-demo.html)
+
 ```python
 import mlrun
 from mlrun.datastore.sources import CSVSource
