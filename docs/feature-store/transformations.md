@@ -14,7 +14,7 @@ can be provided in one of three ways:
 
 * [**Built-in transformations**](#built-in-transformations) &mdash; MLRun is equipped with a set of transformations 
   provided through the {py:mod}`storey.transformations` package. These transformations can be added to the 
-  execution graph to perform common operations and transformations.
+  execution graph to perform common operations and transformations. 
   
 * [**Custom transformations**](#custom-transformations) &mdash; You can extend the built-in functionality by 
   adding new classes that perform any custom operation and use them in the serving graph.
@@ -91,8 +91,8 @@ MLRun, and the associated `storey` package, have a built-in library of transform
 applied as steps in the feature-set's internal execution graph. In order to add steps to the graph, it should be 
 referenced from the {py:class}`~mlrun.feature_store.FeatureSet` object by using the 
 {py:attr}`~mlrun.feature_store.FeatureSet.graph` property. Then, new steps can be added to the graph using the
-functions in {py:mod}`storey.transformations` (follow the link to browse the documentation and the 
-list of existing functions). The transformations are also accessible directly from the `storey` module.
+functions in {py:mod}`storey.transformations` ([see the 
+list of existing functions](../serving/available-steps)). The transformations are also accessible directly from the `storey` module.
 
 ```{admonition} Note
 Internally, MLRun makes use of functions defined in the `storey` package for various purposes. When creating a 
