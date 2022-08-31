@@ -19,6 +19,7 @@ Refer to the **{ref}`tutorial`** for complete examples.
 * [Composing workflows](#composing-workflows)
 * [Saving workflows](#saving-workflows)
 * [Running workflows](#running-workflows)
+* [Scheduling workflows](#scheduling-workflows)
 
 ## Composing workflows
 
@@ -174,3 +175,13 @@ Examples:
     
     # run workflow in local debug mode
     run = project.run(workflow_handler=my_pipe, local=True, arguments={"param1": 6})
+
+## Scheduling workflows
+
+To add a schedule, run the workflow and specify the `schedule` parameter using Cron syntax like so:
+
+```python
+project.run(schedule="0 * * * *")
+```
+
+This runs the job every hour. An excellent resource for generating Cron schedules is [Crontab.guru](https://crontab.guru/).
