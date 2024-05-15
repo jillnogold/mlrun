@@ -31,7 +31,7 @@ Introduction to MLRun - Use serverless functions to train and deploy models
 05-model-monitoring
 06-add-mlops-to-code
 07-batch-infer
-../feature-store/basic-demo
+
 mlflow
 demos
 /cheat-sheet
@@ -68,30 +68,24 @@ How to work with projects, source control (git), CI/CD, to easily build and depl
 Demonstrate MLRun Serving pipelines, MLRun model monitoring, and automated drift detection.
 ```
 
+```{grid-item-card} Batch inference and drift detection
+:link: ./06-batch-infer.html
+Use MLRun batch inference function (from MLRun Function Hub), run it as a batch job, and generate drift reports.
+```
+
 ```{grid-item-card} Add MLOps to existing code
-:link: ./06-add-mlops-to-code.html
+:link: ./07-add-mlops-to-code.html
 Turn a Kaggle research notebook to a production ML micro-service with minimal code changes using MLRun.
 ```
 
-```{grid-item-card} Basic feature store example (stocks)
-:link: ../feature-store/basic-demo.html
-Understand MLRun feature store with a simple example: build, transform, and serve features in batch and in real-time.
-```
 
-```{grid-item-card} Batch inference and drift detection
-:link: ./07-batch-infer.html
-Use MLRun batch inference function (from MLRun Function Hub), run it as a batch job, and generate drift reports.
-```
 
 ```{grid-item-card} Advanced real-time pipeline
 :link: ../serving/graph-example.html
 Demonstrates a multi-step online pipeline with data prep, ensemble, model serving, and post processing. 
 ```
 
-```{grid-item-card} Feature store end-to-end demo
-:link: ../feature-store/end-to-end-demo/index.html
-Use the feature store with data ingestion, model training, model serving, and automated pipeline.
-```
+
 
 ````
 `````

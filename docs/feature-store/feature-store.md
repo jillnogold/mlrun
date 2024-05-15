@@ -27,5 +27,6 @@ feature-sets
 sources-targets
 transformations
 feature-vectors
+basic-demo
 ./end-to-end-demo/index
 ```
