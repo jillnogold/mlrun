@@ -10,6 +10,17 @@ Table of Contents
    tutorials/index
    install   
 
+      
+.. toctree::
+   :maxdepth: 1
+   :caption: MLOps tasks
+   
+   data-prep/index
+   development/index
+   deployment/index
+   monitoring/index
+   projects/ci-cd-automate
+     
 .. toctree::
    :maxdepth: 1
    :caption: Core components
@@ -21,17 +32,7 @@ Table of Contents
    concepts/runs-workflows
    serving/serving-graph
    concepts/monitoring
-       
-.. toctree::
-   :maxdepth: 1
-   :caption: MLOps tasks
-   
-   data-prep/index
-   development/index
-   deployment/index
-   monitoring/index
-   projects/ci-cd-automate
-     
+ 
 .. toctree::
    :maxdepth: 1
    :caption: References
