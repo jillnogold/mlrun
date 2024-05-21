@@ -1,5 +1,5 @@
 (ecosystem)=
-# MLRun ecosystem 
+# Integrations and ecosystem 
 
 This section lists the data stores, development tools, services, platforms, etc., supported by MLRun's open ecosystem. 
 

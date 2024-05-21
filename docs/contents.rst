@@ -6,7 +6,7 @@ Table of Contents
    :caption: MLRun basics
    
    index
-   mlops-dev-flow
+   personas/index
    tutorials/index
    install   
 
@@ -31,8 +31,7 @@ Table of Contents
    feature-store/feature-store
    concepts/runs-workflows
    serving/serving-graph
-   concepts/monitoring
- 
+    
 .. toctree::
    :maxdepth: 1
    :caption: References
