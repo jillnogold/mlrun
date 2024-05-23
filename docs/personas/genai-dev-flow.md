@@ -24,7 +24,7 @@ apportion your resources appropriately. (See {ref}`mlops-dev-flow` for more deta
 
 GenAI flows are based on pre-made models. How to choose a model? Sizing? Resources? Spot instances GPU?
 
-How to work with vector DB
+How to work with vector DB. Flexibility of inpit data, scalability, speed/performance
 
 The implementation of a GenAI workflow is illustrated in the following figure:
 
