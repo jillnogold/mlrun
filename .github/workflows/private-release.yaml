@@ -16,8 +16,8 @@ name: Private Release
 run-name: Privately ( artifactory only ) releasing ${{ inputs.version }} (${{ github.ref_name }})
 
 permissions:
-  # Read repository contents
-  contents: read
+  # Write repository contents (needed to push tags)
+  contents: write
   packages: write
 
 on:
@@ -97,6 +97,23 @@ jobs:
           VERSION_INPUT: ${{ github.event.inputs.version }}
           ARTIFACTORY_PYPI_REPO: ${{ github.event.inputs.artifactory_pypi_repo }}
           UI_REF_INPUT: ${{ github.event.inputs.ui_ref }}
+
+      - name: Display calculated version
+        run: |
+          echo "## 🚀 Private Release" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${{ steps.resolve.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Previous Version:** \`${{ steps.resolve.outputs.previous_version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Is Stable:** \`${{ steps.resolve.outputs.is_stable_version }}\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create git tag for version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ steps.resolve.outputs.version }}" -m "Release v${{ steps.resolve.outputs.version }}"
+          git push origin "v${{ steps.resolve.outputs.version }}"
+          echo "✅ Created and pushed tag: v${{ steps.resolve.outputs.version }}"
 
   trigger-and-wait-for-mlrun-image-building:
     name: Build and push images to Artifactory
